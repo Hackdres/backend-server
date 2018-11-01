@@ -6,6 +6,25 @@ var bodyParser = require('body-parser');
 // Inicializar variables
 var app = express();
 
+
+// CORS
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+    next();
+});
+
+// app.get('/', function(req, res, next) {
+//     // Handle the get for this route
+// });
+
+// app.post('/', function(req, res, next) {
+//     // Handle the post for this route
+// });
+
+
+
 // Body parser
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,6 +38,7 @@ var hospitalRoutes = require('./routes/hospital');
 var medicoRoutes = require('./routes/medico');
 var busquedaRoutes = require('./routes/busqueda');
 var uploadRoutes = require('./routes/upload');
+var imagenesRoutes = require('./routes/imagenes');
 
 // Conexión a la base de datos
 mongoose.connection.openUri('mongodb://localhost:27017/KorperSoftDB', { useNewUrlParser: true, useCreateIndex: true }, (err, res) => {
@@ -27,6 +47,11 @@ mongoose.connection.openUri('mongodb://localhost:27017/KorperSoftDB', { useNewUr
     console.log('Base de datos: \x1b[32m%s\x1b[0m', 'online');
 });
 
+// Server index config
+// var serveIndex = require('serve-index');
+// app.use(express.static(__dirname + '/'));
+// app.use('/uploads', serveIndex(__dirname + '/uploads'));
+
 // rutas
 app.use('/usuario', usuarioRoutes);
 app.use('/hospital', hospitalRoutes);
@@ -34,6 +59,7 @@ app.use('/medico', medicoRoutes);
 app.use('/login', loginRoutes);
 app.use('/buscar', busquedaRoutes);
 app.use('/upload', uploadRoutes);
+app.use('/img', imagenesRoutes);
 
 app.use('/', appRoutes);
 
